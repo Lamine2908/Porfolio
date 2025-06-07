@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - Administrateur Bases de Données</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.querySelector("form");
+            form.addEventListener("submit", function(e) {
+                const button = form.querySelector("button[type=submit]");
+                button.disabled = true;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Envoi en cours...';
+            });
+        });
+    </script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#1E293B',
+                        accent: '#0EA5E9',
+                        dark: '#0F172A',
+                        light: '#F1F5F9'
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+            color: #E2E8F0;
+        }
+        
+        .nav-link {
+            position: relative;
+            padding-bottom: 5px;
+        }
+        
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #0EA5E9;
+            transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .nav-link:hover:after {
+            width: 100%;
+        }
+        
+        .section-title {
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 4px;
+            bottom: 0;
+            left: 20%;
+            background: linear-gradient(90deg, transparent, #0EA5E9, transparent);
+            border-radius: 2px;
+        }
+        
+        .project-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            overflow: hidden;
+            transform: translateY(0);
+        }
+        
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 30px -10px rgba(14, 165, 233, 0.2);
+            border-color: rgba(56, 189, 248, 0.4);
+        }
+        
+        .project-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #0EA5E9, #2563EB);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+        
+        .project-card:hover:before {
+            transform: scaleX(1);
+        }
+        
+        .skill-badge {
+            transition: all 0.3s ease;
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+        
+        .skill-badge:hover {
+            background: #0EA5E9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px -5px rgba(14, 165, 233, 0.4);
+        }
+        
+        .animate-in {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        .delay-1 {
+            animation-delay: 0.1s;
+        }
+        
+        .delay-2 {
+            animation-delay: 0.2s;
+        }
+        
+        .delay-3 {
+            animation-delay: 0.3s;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .tech-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .tech-icon:hover {
+            transform: scale(1.2) rotate(5deg);
+            filter: drop-shadow(0 0 8px rgba(14, 165, 233, 0.6));
+        }
+        
+        .contact-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            transition: all 0.4s ease;
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -10px rgba(14, 165, 233, 0.3);
+            border-color: rgba(56, 189, 248, 0.4);
+        }
+        
+        .project-image {
+            transition: all 0.5s ease;
+        }
+        
+        .project-image:hover {
+            transform: scale(1.03);
+        }
+        
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(14, 165, 233, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(14, 165, 233, 0); }
+        }
+        
+        .profile-photo {
+            border: 4px solid #0EA5E9;
+            box-shadow: 0 0 30px rgba(14, 165, 233, 0.5);
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #0EA5E9;
+        }
+        
+        .timeline-item:after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 20px;
+            width: 2px;
+            height: calc(100% + 30px);
+            background: #0EA5E9;
+        }
+        
+        .timeline-item:last-child:after {
+            display: none;
+        }
+        
+        .certification-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #1E293B;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 10;
+            transform: rotate(5deg);
+        }
+        
+        .certification-image {
+            border: 3px solid #FFD700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .certification-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.7);
+        }
+        
+        .priority-badge {
+            background: linear-gradient(45deg, #0EA5E9, #3B82F6);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body class="font-sans">
+    <!-- Navigation -->
+    <nav class="bg-dark bg-opacity-90 backdrop-blur-md shadow-lg fixed w-full z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-database text-accent text-2xl mr-2"></i>
+                        <span class="font-bold text-xl text-light">DB<span class="text-primary">Admin</span></span>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#accueil" class="nav-link text-gray-300 hover:text-white">Accueil</a>
+                    <a href="#projets" class="nav-link text-gray-300 hover:text-white">Projets</a>
+                    <a href="#competences" class="nav-link text-gray-300 hover:text-white">Compétences</a>
+                    <a href="#details" class="nav-link text-gray-300 hover:text-white">Détails</a>
+                    <a href="#contact" class="nav-link text-gray-300 hover:text-white">Contact</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-300 hover:text-white">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden hidden pb-4 px-4 bg-dark bg-opacity-95">
+            <a href="#accueil" class="block py-3 text-gray-300 hover:text-white border-b border-gray-700">Accueil</a>
+            <a href="#projets" class="block py-3 text-gray-300 hover:text-white border-b border-gray-700">Projets</a>
+            <a href="#competences" class="block py-3 text-gray-300 hover:text-white border-b border-gray-700">Compétences</a>
+            <a href="#details" class="block py-3 text-gray-300 hover:text-white border-b border-gray-700">Détails</a>
+            <a href="#contact" class="block py-3 text-gray-300 hover:text-white">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="accueil" class="pt-28 pb-16 md:pt-36 md:pb-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="md:flex items-center">
+                <div class="md:w-1/2 mb-12 md:mb-0 animate-in">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+                        <span class="text-light">Administrateur</span> <br>
+                        <span class="text-primary">Bases de Données & Systèmes</span>
+                    </h1>
+                    <p class="text-xl mb-8 text-gray-300">Expert en gestion, optimisation et sécurisation des systèmes de bases de données et infrastructures serveurs</p>
+                    <div class="flex space-x-4">
+                        <a href="#projets" class="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition transform hover:-translate-y-1 shadow-lg shadow-blue-500/20">
+                            <i class="fas fa-server mr-2"></i>Voir mes projets
+                        </a>
+                        <a href="#contact" class="border-2 border-accent text-white px-8 py-3 rounded-lg font-semibold hover:bg-accent transition transform hover:-translate-y-1">
+                            <i class="fas fa-envelope mr-2"></i>Me contacter
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center relative">
+                    <div class="relative floating">
+                        <div class="absolute -top-10 -right-10 bg-primary p-6 rounded-full z-10 pulse">
+                            <i class="fas fa-cloud text-3xl text-white"></i>
+                        </div>
+                        <div class="absolute -bottom-10 -left-10 bg-accent p-6 rounded-full z-10">
+                            <i class="fas fa-database text-3xl text-white"></i>
+                        </div>
+                        <div class="relative z-0">
+                            <div class="bg-gradient-to-br from-primary to-accent rounded-full w-64 h-64 md:w-80 md:h-80 flex items-center justify-center profile-photo">
+                                <div class="bg-gray-800 rounded-full w-56 h-56 md:w-72 md:h-72 flex items-center justify-center overflow-hidden">
+                                    <img src="lamine.png" alt="Photo de profil" class="w-full h-full object-cover" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute top-20 -right-20 w-16 h-16 rounded-full bg-accent opacity-50"></div>
+                        <div class="absolute bottom-20 -left-20 w-20 h-20 rounded-full bg-primary opacity-50"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projets Section -->
+    <section id="projets" class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-4 section-title text-light animate-in">Mes Projets</h2>
+            <p class="text-gray-400 text-center max-w-3xl mx-auto mb-12 animate-in delay-1">Découvrez mes réalisations en administration et développement de bases de données, ainsi que mes projets de migration et d'optimisation.</p>
+            
+            <!-- Project Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Serveurs DB -->
+                <div class="project-card rounded-xl p-6 animate-in delay-1">
+                    <div class="mb-4 flex justify-center">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-4">
+                            <i class="fas fa-server text-2xl text-white"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-light text-center">Serveurs de bases de données</h3>
+                    <p class="text-gray-400 mb-4 text-center">Installation et configuration de serveurs MySQL, PostgreSQL, ORACLE et MSSQL Server.</p>
+                    <div class="flex justify-center space-x-4 mt-6">
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fab fa-linux text-accent"></i>
+                        </div>
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fas fa-database text-primary"></i>
+                        </div>
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fab fa-windows text-blue-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card rounded-xl p-6 animate-in delay-2">
+                    <div class="mb-4 flex justify-center">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-4">
+                            <i class="fas fa-exchange-alt text-2xl text-white"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-light text-center">Base de données AUCHAN</h3>
+                    <p class="text-gray-400 mb-4 text-center">Mise en place de la base de données du reseau des magazins auchan avec MySQL sur Linux.</p>
+                    <div class="flex justify-center space-x-4 mt-6">
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fab fa-centos text-orange-500"></i>
+                        </div>
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fab fa-debian text-red-500"></i>
+                        </div>
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fas fa-sync-alt text-accent"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card rounded-xl p-6 animate-in delay-2">
+                    <div class="mb-4 flex justify-center">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-4">
+                            <i class="fas fa-exchange-alt text-2xl text-white"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-light text-center">Base de donnees SENICO</h3>
+                    <p class="text-gray-400 mb-4 text-center">Mise en place du serveur de gestion de bases de données avec MSSQL sur Windows Serveur.</p>
+                    <div class="flex justify-center space-x-4 mt-6">
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fab fa-centos text-orange-500"></i>
+                        </div>
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fab fa-debian text-red-500"></i>
+                        </div>
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fas fa-sync-alt text-accent"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card rounded-xl p-6 animate-in delay-2">
+                    <div class="mb-4 flex justify-center">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-4">
+                            <i class="fas fa-exchange-alt text-2xl text-white"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-light text-center">ORACLE DATAGUARD</h3>
+                    <p class="text-gray-400 mb-4 text-center">Mise en place d'une solution de haute disponibite pour la garde des donnes ORACLE sur Linux.</p>
+                    <div class="flex justify-center space-x-4 mt-6">
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fab fa-centos text-orange-500"></i>
+                        </div>
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fab fa-debian text-red-500"></i>
+                        </div>
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fas fa-sync-alt text-accent"></i>
+                        </div>
+                    </div>
+                </div>                
+
+                <!-- Migration -->
+                <div class="project-card rounded-xl p-6 animate-in delay-2">
+                    <div class="mb-4 flex justify-center">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-4">
+                            <i class="fas fa-exchange-alt text-2xl text-white"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-light text-center">Migration CentOS ↔ Debian</h3>
+                    <p class="text-gray-400 mb-4 text-center">Migration de bases de données entre serveurs CentOS et Debian sans interruption.</p>
+                    <div class="flex justify-center space-x-4 mt-6">
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fab fa-centos text-orange-500"></i>
+                        </div>
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fab fa-debian text-red-500"></i>
+                        </div>
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fas fa-sync-alt text-accent"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PL/SQL -->
+                <div class="project-card rounded-xl p-6 animate-in delay-2">
+                    <div class="mb-4 flex justify-center">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-4">
+                            <i class="fas fa-code text-2xl text-white"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-light text-center">Développement PL/SQL</h3>
+                    <p class="text-gray-400 mb-4 text-center">Développement de bases de données avec PL/SQL pour MSSQL, MySQL et PostgreSQL.</p>
+                    <div class="flex justify-center space-x-4 mt-6">
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fas fa-database text-red-500"></i>
+                        </div>
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fas fa-terminal text-green-500"></i>
+                        </div>
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fas fa-code text-accent"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hyper-V -->
+                <div class="project-card rounded-xl p-6 animate-in delay-3">
+                    <div class="mb-4 flex justify-center">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-4">
+                            <i class="fas fa-cloud text-2xl text-white"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-light text-center">Serveur Hyper-V</h3>
+                    <p class="text-gray-400 mb-4 text-center">Mise en place d'un serveur Hyper-V sous Windows Server.</p>
+                    <div class="flex justify-center space-x-4 mt-6">
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fab fa-microsoft text-blue-400"></i>
+                        </div>
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fas fa-server text-accent"></i>
+                        </div>
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fas fa-desktop text-green-500"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- VPN -->
+                <div class="project-card rounded-xl p-6 animate-in delay-1">
+                    <div class="mb-4 flex justify-center">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-4">
+                            <i class="fas fa-shield-alt text-2xl text-white"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-light text-center">Serveur VPN</h3>
+                    <p class="text-gray-400 mb-4 text-center">Mise en place d'un serveur VPN sous Windows Server 2019.</p>
+                    <div class="flex justify-center space-x-4 mt-6">
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fab fa-windows text-blue-400"></i>
+                        </div>
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fas fa-lock text-yellow-400"></i>
+                        </div>
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fas fa-network-wired text-accent"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <!-- Business Intelligence -->
+                <div class="project-card rounded-xl p-6 animate-in delay-3">
+                    <div class="mb-4 flex justify-center">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-4">
+                            <i class="fas fa-chart-line text-2xl text-white"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-light text-center">Business Intelligence</h3>
+                    <p class="text-gray-400 mb-4 text-center">Analyse et visualisation de données avec Power BI.</p>
+                    <div class="flex justify-center space-x-4 mt-6">
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fas fa-chart-bar text-yellow-400"></i>
+                        </div>
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fas fa-database text-blue-400"></i>
+                        </div>
+                        <div class="tech-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                            <i class="fab fa-microsoft text-green-500"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Compétences Section -->
+    <section id="competences" class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-4 section-title text-light animate-in">Mes Compétences</h2>
+            <p class="text-gray-400 text-center max-w-3xl mx-auto mb-12 animate-in delay-1">Je maîtrise un large éventail de technologies et méthodologies liées à l'administration et au développement de bases de données.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- Left Column - Database Skills -->
+                <div class="animate-in delay-1">
+                    <h3 class="text-xl font-semibold mb-6 text-primary flex items-center">
+                        <i class="fas fa-database mr-3"></i>
+                        Expertise en Bases de Données
+                    </h3>
+                    <div class="space-y-6">
+                        <!-- Bases de données -->
+                        <div>
+                            <h4 class="font-medium mb-3 flex items-center text-light">
+                                <i class="fas fa-database mr-2 text-accent"></i>
+                                Systèmes de gestion
+                            </h4>
+                            <div class="flex flex-wrap gap-3">
+                                <span class="skill-badge px-4 py-2 rounded-full flex items-center">
+                                    <i class="fab fa-microsoft text-blue-400 mr-2"></i>SQL Server
+                                </span>
+                                <span class="skill-badge px-4 py-2 rounded-full flex items-center">
+                                    <i class="fas fa-database text-blue-500 mr-2"></i>PostgreSQL
+                                </span>
+                                <span class="skill-badge px-4 py-2 rounded-full flex items-center">
+                                    <i class="fas fa-database text-orange-500 mr-2"></i>MySQL
+                                </span>
+                                <span class="skill-badge px-4 py-2 rounded-full flex items-center">
+                                    <i class="fas fa-database text-red-500 mr-2"></i>Oracle
+                                </span>
+                                <span class="skill-badge px-4 py-2 rounded-full flex items-center">
+                                    <i class="fas fa-code mr-2 text-green-500"></i>PL/SQL
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Administration -->
+                        <div>
+                            <h4 class="font-medium mb-3 flex items-center text-light">
+                                <i class="fas fa-tools mr-2 text-accent"></i>
+                                Administration
+                                <span class="priority-badge">Priorité</span>
+                            </h4>
+                            <div class="flex flex-wrap gap-3">
+                                <span class="skill-badge px-4 py-2 rounded-full flex items-center">
+                                    <i class="fas fa-sync-alt text-accent mr-2"></i>Migration DB
+                                </span>
+                                <span class="skill-badge px-4 py-2 rounded-full flex items-center">
+                                    <i class="fas fa-shield-alt text-yellow-400 mr-2"></i>Sécurité
+                                </span>
+                                <span class="skill-badge px-4 py-2 rounded-full flex items-center">
+                                    <i class="fas fa-rocket text-green-500 mr-2"></i>Optimisation
+                                </span>
+                                <span class="skill-badge px-4 py-2 rounded-full flex items-center">
+                                    <i class="fas fa-copy text-blue-400 mr-2"></i>Sauvegarde/Restauration
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Langages -->
+                        <div>
+                            <h4 class="font-medium mb-3 flex items-center text-light">
+                                <i class="fas fa-terminal mr-2 text-accent"></i>
+                                Langages
+                            </h4>
+                            <div class="flex flex-wrap gap-3">
+                                <span class="skill-badge px-4 py-2 rounded-full flex items-center">
+                                    <i class="fas fa-database text-accent mr-2"></i>SQL
+                                </span>
+                                <span class="skill-badge px-4 py-2 rounded-full flex items-center">
+                                    <i class="fas fa-code mr-2 text-green-500"></i>PL/SQL
+                                </span>
+                                <span class="skill-badge px-4 py-2 rounded-full flex items-center">
+                                    <i class="fas fa-code mr-2 text-blue-400"></i>T-SQL
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Column - Development Skills -->
+                <div class="animate-in delay-2">
+                    <h3 class="text-xl font-semibold mb-6 text-primary flex items-center">
+                        <i class="fas fa-laptop-code mr-3"></i>
+                        Développement & Technologies
+                    </h3>
+                    <div class="space-y-6">
+                        <!-- Frontend -->
+                        <div>
+                            <h4 class="font-medium mb-3 flex items-center text-light">
+                                <i class="fas fa-code mr-2 text-accent"></i>
+                                Frontend
+                            </h4>
+                            <div class="flex flex-wrap gap-3">
+                                <span class="skill-badge px-4 py-2 rounded-full flex items-center">
+                                    <i class="fab fa-html5 text-orange-500 mr-2"></i>HTML
+                                </span>
+                                <span class="skill-badge px-4 py-2 rounded-full flex items-center">
+                                    <i class="fab fa-css3-alt text-blue-500 mr-2"></i>CSS
+                                </span>
+                                <span class="skill-badge px-4 py-2 rounded-full flex items-center">
+                                    <i class="fab fa-js text-yellow-400 mr-2"></i>JavaScript
+                                </span>
+                                <span class="skill-badge px-4 py-2 rounded-full flex items-center">
+                                    <i class="fab fa-bootstrap text-purple-500 mr-2"></i>Bootstrap
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Backend -->
+                        <div>
+                            <h4 class="font-medium mb-3 flex items-center text-light">
+                                <i class="fas fa-server mr-2 text-accent"></i>
+                                Backend & Frameworks
+                            </h4>
+                            <div class="flex flex-wrap gap-3">
+                                <span class="skill-badge px-4 py-2 rounded-full flex items-center">
+                                    <i class="fab fa-python text-blue-400 mr-2"></i>Python Django
+                                </span>
+                                <span class="skill-badge px-4 py-2 rounded-full flex items-center">
+                                    <i class="fab fa-microsoft text-blue-500 mr-2"></i>C# ASP.NET
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Systèmes -->
+                        <div>
+                            <h4 class="font-medium mb-3 flex items-center text-light">
+                                <i class="fas fa-desktop mr-2 text-accent"></i>
+                                Systèmes d'exploitation
+                            </h4>
+                            <div class="flex flex-wrap gap-3">
+                                <span class="skill-badge px-4 py-2 rounded-full flex items-center">
+                                    <i class="fab fa-windows text-blue-400 mr-2"></i>Windows Server
+                                </span>
+                                <span class="skill-badge px-4 py-2 rounded-full flex items-center">
+                                    <i class="fab fa-linux text-accent mr-2"></i>Linux
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Certification -->
+            <div class="mt-16 animate-in delay-3">
+                <h3 class="text-xl font-semibold mb-6 text-primary flex items-center">
+                    <i class="fas fa-award mr-3"></i>
+                    Certifications
+                </h3>
+                <div class="flex flex-col md:flex-row items-center justify-center gap-8">
+                    <div class="md:w-1/2">
+                        <div class="bg-gradient-to-br from-primary to-accent rounded-xl p-1 inline-block certification-image">
+                            <div class="bg-gray-800 rounded-xl overflow-hidden w-full h-64">
+                                <img src="attestation_isep.jpg" alt="Certification en administration de bases de données" class="w-72 h-72 h-auto object-cover">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2">
+                        <h3 class="text-2xl font-bold text-light mb-4">Certification en Administration de Bases de Données</h3>
+                        <p class="text-gray-400 mb-4">Cette certification atteste de mes compétences avancées en administration, optimisation et sécurisation des systèmes de bases de données.</p>
+                        <ul class="list-disc pl-5 space-y-2 mb-6 text-gray-400">
+                            <li>Administration de serveurs SQL Server, ORACLE, PostgreSQL et MySQL</li>
+                            <li>Optimisation des performances des bases de données</li>
+                            <li>Mise en place de stratégies de sauvegarde et récupération</li>
+                            <li>Sécurisation des accès et des données sensibles</li>
+                            <li>Migration de bases de données entre environnements</li>
+                        </ul>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-blue-500 bg-opacity-20 text-blue-300 px-3 py-1 rounded-full text-sm flex items-center">
+                                <i class="fas fa-database mr-1"></i> SQL Server
+                            </span>
+                            <span class="bg-blue-500 bg-opacity-20 text-blue-300 px-3 py-1 rounded-full text-sm flex items-center">
+                                <i class="fas fa-database mr-1"></i> ORACLE
+                            </span>
+                            <span class="bg-blue-500 bg-opacity-20 text-blue-300 px-3 py-1 rounded-full text-sm flex items-center">
+                                <i class="fas fa-database mr-1"></i> PostgreSQL
+                            </span>
+                            <span class="bg-blue-500 bg-opacity-20 text-blue-300 px-3 py-1 rounded-full text-sm flex items-center">
+                                <i class="fas fa-database mr-1"></i> MySQL
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Details Section -->
+    <section id="details" class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-4 section-title text-light animate-in">Détails des Projets</h2>
+            <p class="text-gray-400 text-center max-w-3xl mx-auto mb-12 animate-in delay-1">Explorez en détail certains de mes projets les plus significatifs en administration de bases de données.</p>
+            
+            <!-- Hyper-V -->
+            <div class="mb-16 bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl p-8 shadow-xl animate-in">
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="md:w-1/2">
+                        <div class="project-image overflow-hidden rounded-xl shadow-lg">
+                            <div class="bg-gradient-to-br from-blue-500 to-indigo-600 h-64 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-cloud text-8xl text-white opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2">
+                        <h3 class="text-2xl font-bold mb-4 text-light">Serveur Hyper-V</h3>
+                        <p class="text-gray-400 mb-4">Mise en place d'un serveur de virtualisation Hyper-V sous Windows Server.</p>
+                        <ul class="list-disc pl-5 space-y-2 mb-6 text-gray-400">
+                            <li>Installation et configuration de Hyper-V sur Windows Server</li>
+                            <li>Création et gestion de machines virtuelles pour différents services</li>
+                            <li>Configuration de la haute disponibilité et du basculement</li>
+                            <li>Optimisation des performances et allocation des ressources</li>
+                            <li>Mise en place de sauvegardes automatisées des VMs</li>
+                        </ul>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-blue-500 bg-opacity-20 text-blue-300 px-3 py-1 rounded-full text-sm flex items-center">
+                                <i class="fab fa-microsoft mr-1"></i> Hyper-V
+                            </span>
+                            <span class="bg-blue-500 bg-opacity-20 text-blue-300 px-3 py-1 rounded-full text-sm flex items-center">
+                                <i class="fab fa-windows mr-1"></i> Windows Server
+                            </span>
+                            <span class="bg-blue-500 bg-opacity-20 text-blue-300 px-3 py-1 rounded-full text-sm flex items-center">
+                                <i class="fas fa-server mr-1"></i> Virtualisation
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- VPN -->
+            <div class="mb-16 bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl p-8 shadow-xl animate-in delay-1">
+                <div class="flex flex-col md:flex-row-reverse items-center gap-8">
+                    <div class="md:w-1/2">
+                        <div class="project-image overflow-hidden rounded-xl shadow-lg">
+                            <div class="bg-gradient-to-br from-green-500 to-teal-400 h-64 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-shield-alt text-8xl text-white opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2">
+                        <h3 class="text-2xl font-bold mb-4 text-light">Serveur VPN sous Windows Server</h3>
+                        <p class="text-gray-400 mb-4">Implémentation d'un service VPN sécurisé sous Windows Server 2019 pour l'accès distant des employés.</p>
+                        <ul class="list-disc pl-5 space-y-2 mb-6 text-gray-400">
+                            <li>Configuration du rôle "Accès à distance" sous Windows Server</li>
+                            <li>Mise en place de l'authentification via Active Directory</li>
+                            <li>Chiffrement des communications avec des protocoles sécurisés</li>
+                            <li>Configuration des règles de pare-feu et des politiques de sécurité</li>
+                            <li>Monitoring et journalisation des connexions</li>
+                        </ul>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-green-500 bg-opacity-20 text-green-300 px-3 py-1 rounded-full text-sm flex items-center">
+                                <i class="fab fa-windows mr-1"></i> Windows Server
+                            </span>
+                            <span class="bg-green-500 bg-opacity-20 text-green-300 px-3 py-1 rounded-full text-sm flex items-center">
+                                <i class="fas fa-lock mr-1"></i> Sécurité
+                            </span>
+                            <span class="bg-green-500 bg-opacity-20 text-green-300 px-3 py-1 rounded-full text-sm flex items-center">
+                                <i class="fas fa-network-wired mr-1"></i> VPN
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PL/SQL -->
+            <div class="mb-16 bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl p-8 shadow-xl animate-in delay-2">
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="md:w-1/2">
+                        <div class="project-image overflow-hidden rounded-xl shadow-lg">
+                            <div class="bg-gradient-to-br from-purple-500 to-indigo-600 h-64 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-code text-8xl text-white opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2">
+                        <h3 class="text-2xl font-bold mb-4 text-light">Développement PL/SQL</h3>
+                        <p class="text-gray-400 mb-4">Développement de bases de données complexes avec PL/SQL pour Oracle, incluant procédures stockées, triggers et fonctions.</p>
+                        <ul class="list-disc pl-5 space-y-2 mb-6 text-gray-400">
+                            <li>Conception et optimisation de schémas de base de données</li>
+                            <li>Développement de procédures stockées complexes</li>
+                            <li>Implémentation de triggers pour l'intégrité des données</li>
+                            <li>Optimisation des performances des requêtes SQL</li>
+                            <li>Documentation technique des processus implémentés</li>
+                        </ul>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-purple-500 bg-opacity-20 text-purple-300 px-3 py-1 rounded-full text-sm flex items-center">
+                                <i class="fas fa-database mr-1"></i> Oracle
+                            </span>
+                            <span class="bg-purple-500 bg-opacity-20 text-purple-300 px-3 py-1 rounded-full text-sm flex items-center">
+                                <i class="fas fa-code mr-1"></i> PL/SQL
+                            </span>
+                            <span class="bg-purple-500 bg-opacity-20 text-purple-300 px-3 py-1 rounded-full text-sm flex items-center">
+                                <i class="fas fa-terminal mr-1"></i> Développement
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Gestion de projet -->
+            <div class="bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl p-8 shadow-xl animate-in delay-3">
+                <div class="flex flex-col md:flex-row-reverse items-center gap-8">
+                    <div class="md:w-1/2">
+                        <div class="project-image overflow-hidden rounded-xl shadow-lg">
+                            <div class="bg-gradient-to-br from-yellow-500 to-orange-500 h-64 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-tasks text-8xl text-white opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2">
+                        <h3 class="text-2xl font-bold mb-4 text-light">Gestion de projet avec Jira et Scrum</h3>
+                        <p class="text-gray-400 mb-4">Gestion de projets informatiques avec la méthodologie Agile/Scrum et l'outil Jira.</p>
+                        <ul class="list-disc pl-5 space-y-2 mb-6 text-gray-400">
+                            <li>Planification des sprints et définition des user stories</li>
+                            <li>Configuration et personnalisation des workflows dans Jira</li>
+                            <li>Animation des cérémonies Scrum (daily, planning, review, retrospective)</li>
+                            <li>Suivi de la vélocité et optimisation des processus</li>
+                            <li>Gestion des backlogs produits et techniques</li>
+                        </ul>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-yellow-500 bg-opacity-20 text-yellow-300 px-3 py-1 rounded-full text-sm flex items-center">
+                                <i class="fab fa-jira mr-1"></i> Jira
+                            </span>
+                            <span class="bg-yellow-500 bg-opacity-20 text-yellow-300 px-3 py-1 rounded-full text-sm flex items-center">
+                                <i class="fas fa-sync-alt mr-1"></i> Scrum
+                            </span>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-4 section-title text-light animate-in">Contactez-moi</h2>
+            <p class="text-xl text-center max-w-3xl mx-auto mb-12 text-gray-300 animate-in delay-1">Vous avez un projet ou une question? N'hésitez pas à me contacter!</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+    <!-- Contact Form -->
+    <div class="contact-card rounded-xl p-8 shadow-xl animate-in delay-1">
+        <h3 class="text-2xl font-bold text-light mb-6">Envoyez un message</h3>
+        <form action="https://formspree.io/f/xldngwnq" method="POST">
+            <!-- Champ caché pour le sujet personnalisé -->
+            <input type="hidden" name="_subject" value="Nouveau message depuis votre site">
+            
+            <!-- Champ honeypot anti-spam -->
+            <input type="text" name="_gotcha" style="display:none">
+
+            <div class="mb-4">
+                <label class="block text-gray-400 mb-2" for="name">Nom complet*</label>
+                <input type="text" id="name" name="name" required class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent text-white">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-400 mb-2" for="email">Email*</label>
+                <input type="email" id="email" name="email" required class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent text-white">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-400 mb-2" for="subject">Sujet*</label>
+                <input type="text" id="subject" name="_subject" required class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent text-white">
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-400 mb-2" for="message">Message*</label>
+                <textarea id="message" name="message" rows="5" required class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent text-white"></textarea>
+            </div>
+            <button type="submit" class="w-full bg-gradient-to-r from-primary to-accent text-white py-3 rounded-lg font-semibold hover:opacity-90 transition shadow-lg shadow-blue-500/20">
+                <i class="fas fa-paper-plane mr-2"></i>Envoyer le message
+            </button>
+        </form>
+        <div class="mt-4 text-center text-sm text-gray-400">
+            <p>Vous recevrez une copie de votre message par email</p>
+        </div>
+    </div>
+</div>
+                <!-- Contact Info -->
+                <div class="animate-in delay-2">
+                    <h3 class="text-2xl font-bold mb-6 text-light">Coordonnées</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="bg-accent bg-opacity-20 p-4 rounded-xl mr-4">
+                                <i class="fas fa-map-marker-alt text-xl text-accent"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg text-light">Adresse</h4>
+                                <p class="text-gray-400">CHEIKH SUD RUFISQUE, Rufisque, Dakar</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-accent bg-opacity-20 p-4 rounded-xl mr-4">
+                                <i class="fas fa-phone-alt text-xl text-accent"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg text-light">Téléphone</h4>
+                                <p class="text-gray-400">+221 77 663 60 06</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-accent bg-opacity-20 p-4 rounded-xl mr-4">
+                                <i class="fas fa-envelope text-xl text-accent"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg text-light">Email</h4>
+                                <p class="text-gray-400">laminfal2908@gmail.com</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-accent bg-opacity-20 p-4 rounded-xl mr-4">
+                                <i class="fas fa-globe text-xl text-accent"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg text-light">Réseaux sociaux</h4>
+                                <div class="flex space-x-4 mt-4">
+                                    <a href="#" class="bg-accent bg-opacity-20 p-4 rounded-xl hover:bg-opacity-30 transition">
+                                        <i class="fab fa-linkedin-in text-xl"></i>
+                                    </a>
+                                    <a href="#" class="bg-accent bg-opacity-20 p-4 rounded-xl hover:bg-opacity-30 transition">
+                                        <i class="fab fa-github text-xl"></i>
+                                    </a>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-12 p-6 bg-gray-800 rounded-xl">
+                        <h3 class="text-xl font-bold mb-4 text-light">Disponibilité</h3>
+                        <p class="mb-4 text-gray-400">Je suis disponible pour des missions d'administration de bases de données, des consultations ou des projets de développement.</p>
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+                            <span class="text-green-400">Disponible pour de nouvelles opportunités</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-8 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="md:flex justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center">
+                        <i class="fas fa-database text-accent text-2xl mr-2"></i>
+                        <span class="font-bold text-xl text-light">DB<span class="text-primary">Admin</span></span>
+                    </div>
+                    <p class="mt-2 text-gray-500">Expert en administration et développement de bases de données</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-500 hover:text-white transition">
+                        <i class="fab fa-linkedin-in text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 hover:text-white transition">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 hover:text-white transition">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-800 text-center text-gray-500">
+                <p>&copy; 2023 Tous droits réservés - Portfolio Administrateur Bases de Données</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    document.getElementById('mobile-menu').classList.add('hidden');
+                }
+            });
+        });
+        
+        // Animation on scroll
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all sections
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+        
+        // Observe project cards
+        document.querySelectorAll('.project-card').forEach(card => {
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
